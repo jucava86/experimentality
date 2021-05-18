@@ -1,0 +1,4 @@
+1 usar la función /api/User/login Para generar el bearer token
+2 utilizar el token para acceder a las función es ya sea en swagger registrándolo en la parte superior o en postman enviándolo como autorización 
+3 ejecutar la función /api/Productos/CargueInicial con el fin de crear registro en la base de datos 
+4 crear producto y categorías con las diferentes funciones de la API (CRUD) 

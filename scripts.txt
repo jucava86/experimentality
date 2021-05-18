@@ -1,6 +1,6 @@
 USE [master]
 GO
-/****** Object:  Database [Store]    Script Date: 14/05/2021 11:37:46 a. m. ******/
+/****** Object:  Database [Store]    Script Date: 17/05/2021 11:24:59 p. m. ******/
 CREATE DATABASE [Store]
  CONTAINMENT = NONE
  ON  PRIMARY 
@@ -78,17 +78,50 @@ ALTER DATABASE [Store] SET QUERY_STORE = OFF
 GO
 USE [Store]
 GO
-/****** Object:  User [sa2021]    Script Date: 14/05/2021 11:37:46 a. m. ******/
+/****** Object:  User [sa2021]    Script Date: 17/05/2021 11:24:59 p. m. ******/
 CREATE USER [sa2021] WITHOUT LOGIN WITH DEFAULT_SCHEMA=[dbo]
 GO
-/****** Object:  User [sa1]    Script Date: 14/05/2021 11:37:46 a. m. ******/
+/****** Object:  User [sa1]    Script Date: 17/05/2021 11:24:59 p. m. ******/
 CREATE USER [sa1] FOR LOGIN [sa1] WITH DEFAULT_SCHEMA=[dbo]
 GO
 ALTER ROLE [db_owner] ADD MEMBER [sa2021]
 GO
 ALTER ROLE [db_owner] ADD MEMBER [sa1]
 GO
-/****** Object:  Table [dbo].[Productos]    Script Date: 14/05/2021 11:37:46 a. m. ******/
+/****** Object:  Table [dbo].[Categoria]    Script Date: 17/05/2021 11:24:59 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Categoria](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[Nombre] [nvarchar](500) NOT NULL,
+	[Estado] [bit] NOT NULL,
+	[FechaCreacion] [datetime] NOT NULL,
+ CONSTRAINT [PK_Categoria] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Producto_Categoria]    Script Date: 17/05/2021 11:24:59 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Producto_Categoria](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ProductoId] [bigint] NOT NULL,
+	[CategoriaId] [bigint] NOT NULL,
+	[Estado] [bit] NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+ CONSTRAINT [PK_Producto_Categoria] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Productos]    Script Date: 17/05/2021 11:24:59 p. m. ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -108,15 +141,23 @@ CREATE TABLE [dbo].[Productos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-SET IDENTITY_INSERT [dbo].[Productos] ON 
+/****** Object:  Table [dbo].[Ventas]    Script Date: 17/05/2021 11:24:59 p. m. ******/
+SET ANSI_NULLS ON
 GO
-INSERT [dbo].[Productos] ([Id], [Nombre], [Precio], [Descuento], [ImgFront], [ImgBack], [Estado], [FechaCreacion]) VALUES (1, N'blusa', 20.1, 0, N'', N'', 0, CAST(N'2021-05-12T23:29:14.220' AS DateTime))
+SET QUOTED_IDENTIFIER ON
 GO
-INSERT [dbo].[Productos] ([Id], [Nombre], [Precio], [Descuento], [ImgFront], [ImgBack], [Estado], [FechaCreacion]) VALUES (2, N'blusa negr', 50, 10, N'test', N'back', 1, CAST(N'2021-05-13T10:28:44.347' AS DateTime))
-GO
-INSERT [dbo].[Productos] ([Id], [Nombre], [Precio], [Descuento], [ImgFront], [ImgBack], [Estado], [FechaCreacion]) VALUES (3, N'string', 60.5, 30, N'url front', N'url back', 1, CAST(N'2021-05-13T11:20:36.230' AS DateTime))
-GO
-SET IDENTITY_INSERT [dbo].[Productos] OFF
+CREATE TABLE [dbo].[Ventas](
+	[Id] [bigint] IDENTITY(1,1) NOT NULL,
+	[ProductoId] [bigint] NOT NULL,
+	[Cantidad] [bigint] NOT NULL,
+	[Valor] [float] NOT NULL,
+	[Estado] [int] NOT NULL,
+	[Fecha] [datetime] NOT NULL,
+ CONSTRAINT [PK_Ventas] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
 USE [master]
 GO

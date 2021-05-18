@@ -17,7 +17,10 @@ namespace WebApi.Models
         {
         }
 
+        public virtual DbSet<Categorium> Categoria { get; set; }
         public virtual DbSet<Producto> Productos { get; set; }
+        public virtual DbSet<ProductoCategorium> ProductoCategoria { get; set; }
+        public virtual DbSet<Venta> Ventas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +34,15 @@ namespace WebApi.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
+
+            modelBuilder.Entity<Categorium>(entity =>
+            {
+                entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(500);
+            });
 
             modelBuilder.Entity<Producto>(entity =>
             {
@@ -47,6 +59,18 @@ namespace WebApi.Models
                 entity.Property(e => e.Nombre)
                     .IsRequired()
                     .HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<ProductoCategorium>(entity =>
+            {
+                entity.ToTable("Producto_Categoria");
+
+                entity.Property(e => e.Fecha).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Venta>(entity =>
+            {
+                entity.Property(e => e.Fecha).HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

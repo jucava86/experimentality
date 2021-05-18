@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WebApi.Models;
 
@@ -82,9 +84,10 @@ namespace WebApi.Controllers
         }
 
         // GET api/<ProductosController>/5
-        [Route("GetName")]
+        [Route("ConsultarNombre")]
         [HttpGet]
-        public Response GetName(string nombre)
+        [Authorize]
+        public Response ConsultarNombre(string nombre)
         {
             Response result = new Response();
             try
@@ -227,6 +230,75 @@ namespace WebApi.Controllers
                 result.Message = ex.Message;
                 result.Data = null;
             }
+            return result;
+        }
+
+
+        // GET api/<ProductosController>/5
+        [Route("CargueInicial")]
+        [HttpGet]
+        public Response CargueInicial()
+        {
+            Response result = new Response();
+            try
+            {
+                using (StoreContext conexion = new StoreContext())
+                {
+                    List<Categorium> arrayCategorias = new List<Categorium>();
+                    arrayCategorias.Add(new Categorium { Nombre = "Hombre", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayCategorias.Add(new Categorium { Nombre = "Mujer", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayCategorias.Add(new Categorium { Nombre = "Junior", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayCategorias.Add(new Categorium { Nombre = "Niños", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayCategorias.Add(new Categorium { Nombre = "Oferta", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayCategorias.Add(new Categorium { Nombre = "Accesorios", FechaCreacion = DateTime.Now, Estado = true });
+
+                    conexion.Categoria.AddRange(arrayCategorias);
+                    conexion.SaveChanges();
+
+                    List<Producto> arrayProductos = new List<Producto>();
+                    arrayProductos.Add(new Producto { Nombre = "Blusa rosa", Precio = 34.5, Descuento = 5, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "Pantalon gris dama", Precio = 22, Descuento = 5, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "Chaleco", Precio = 15, Descuento = 0, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "Chaqueta", Precio = 60, Descuento = 30, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "Blusa verde", Precio = 34.5, Descuento = 5, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "Pantalon jean", Precio = 22, Descuento = 5, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "camiseta", Precio = 15, Descuento = 0, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "zapatos", Precio = 60, Descuento = 30, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "gorra", Precio = 34.5, Descuento = 5, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "camisa niño", Precio = 22, Descuento = 5, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "cinturon", Precio = 15, Descuento = 0, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+                    arrayProductos.Add(new Producto { Nombre = "reloj", Precio = 60, Descuento = 30, ImgFront = "", ImgBack = "", FechaCreacion = DateTime.Now, Estado = true });
+
+                    conexion.Productos.AddRange(arrayProductos);
+                    conexion.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = ex.Message;
+                result.Data = null;
+            }
+            return result;
+        }
+
+        public static async Task<bool> ProdutoExiste(string nombre)
+        {
+            bool result = false;
+            var tarea = new Task(() => {
+                using (StoreContext conexion = new StoreContext())
+                {
+                    var validar = conexion.Productos.Where(p => p.Nombre == nombre && p.Estado == true).FirstOrDefault();
+                    if (validar != null)
+                    {
+                        result = true;
+                    }
+                }
+            });
+
+            tarea.Start();
+            await tarea;
+
             return result;
         }
     }
