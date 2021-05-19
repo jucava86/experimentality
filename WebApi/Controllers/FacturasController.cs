@@ -13,47 +13,47 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CategoriaController : ControllerBase
+    public class FacturasController : ControllerBase
     {
         private readonly StoreContext _context;
 
-        public CategoriaController(StoreContext context)
+        public FacturasController(StoreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Categoria
+        // GET: api/Facturas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categorium>>> GetCategoria()
+        public async Task<ActionResult<IEnumerable<Factura>>> GetFacturas()
         {
-            return await _context.Categoria.Where(p=> p.Estado == true).ToListAsync();
+            return await _context.Facturas.ToListAsync();
         }
 
-        // GET: api/Categoria/5
+        // GET: api/Facturas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categorium>> GetCategorium(long id)
+        public async Task<ActionResult<Factura>> GetFactura(long id)
         {
-            var categorium = await _context.Categoria.FindAsync(id);
+            var factura = await _context.Facturas.FindAsync(id);
 
-            if (categorium == null)
+            if (factura == null)
             {
                 return NotFound();
             }
 
-            return categorium;
+            return factura;
         }
 
-        // PUT: api/Categoria/5
+        // PUT: api/Facturas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategorium(long id, Categorium categorium)
+        public async Task<IActionResult> PutFactura(long id, Factura factura)
         {
-            if (id != categorium.Id)
+            if (id != factura.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(categorium).State = EntityState.Modified;
+            _context.Entry(factura).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoriumExists(id))
+                if (!FacturaExists(id))
                 {
                     return NotFound();
                 }
@@ -74,36 +74,36 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Categoria
+        // POST: api/Facturas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Categorium>> PostCategorium(Categorium categorium)
+        public async Task<ActionResult<Factura>> PostFactura(Factura factura)
         {
-            _context.Categoria.Add(categorium);
+            _context.Facturas.Add(factura);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategorium", new { id = categorium.Id }, categorium);
+            return CreatedAtAction("GetFactura", new { id = factura.Id }, factura);
         }
 
-        // DELETE: api/Categoria/5
+        // DELETE: api/Facturas/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategorium(long id)
+        public async Task<IActionResult> DeleteFactura(long id)
         {
-            var categorium = await _context.Categoria.FindAsync(id);
-            if (categorium == null)
+            var factura = await _context.Facturas.FindAsync(id);
+            if (factura == null)
             {
                 return NotFound();
             }
 
-            _context.Categoria.Remove(categorium);
+            _context.Facturas.Remove(factura);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CategoriumExists(long id)
+        private bool FacturaExists(long id)
         {
-            return _context.Categoria.Any(e => e.Id == id);
+            return _context.Facturas.Any(e => e.Id == id);
         }
     }
 }

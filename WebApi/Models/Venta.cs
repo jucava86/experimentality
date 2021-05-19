@@ -13,5 +13,6 @@ namespace WebApi.Models
         public double Valor { get; set; }
         public int Estado { get; set; }
         public DateTime Fecha { get; set; }
+        public long FacturaId { get; set; }
     }
 }

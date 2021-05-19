@@ -13,47 +13,47 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class CategoriaController : ControllerBase
+    public class VentasController : ControllerBase
     {
         private readonly StoreContext _context;
 
-        public CategoriaController(StoreContext context)
+        public VentasController(StoreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Categoria
+        // GET: api/Ventas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categorium>>> GetCategoria()
+        public async Task<ActionResult<IEnumerable<Venta>>> GetVentas()
         {
-            return await _context.Categoria.Where(p=> p.Estado == true).ToListAsync();
+            return await _context.Ventas.ToListAsync();
         }
 
-        // GET: api/Categoria/5
+        // GET: api/Ventas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Categorium>> GetCategorium(long id)
+        public async Task<ActionResult<Venta>> GetVenta(long id)
         {
-            var categorium = await _context.Categoria.FindAsync(id);
+            var venta = await _context.Ventas.FindAsync(id);
 
-            if (categorium == null)
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            return categorium;
+            return venta;
         }
 
-        // PUT: api/Categoria/5
+        // PUT: api/Ventas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategorium(long id, Categorium categorium)
+        public async Task<IActionResult> PutVenta(long id, Venta venta)
         {
-            if (id != categorium.Id)
+            if (id != venta.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(categorium).State = EntityState.Modified;
+            _context.Entry(venta).State = EntityState.Modified;
 
             try
             {
@@ -61,7 +61,7 @@ namespace WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CategoriumExists(id))
+                if (!VentaExists(id))
                 {
                     return NotFound();
                 }
@@ -74,36 +74,36 @@ namespace WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Categoria
+        // POST: api/Ventas
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Categorium>> PostCategorium(Categorium categorium)
+        public async Task<ActionResult<Venta>> PostVenta(Venta venta)
         {
-            _context.Categoria.Add(categorium);
+            _context.Ventas.Add(venta);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategorium", new { id = categorium.Id }, categorium);
+            return CreatedAtAction("GetVenta", new { id = venta.Id }, venta);
         }
 
-        // DELETE: api/Categoria/5
+        // DELETE: api/Ventas/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategorium(long id)
+        public async Task<IActionResult> DeleteVenta(long id)
         {
-            var categorium = await _context.Categoria.FindAsync(id);
-            if (categorium == null)
+            var venta = await _context.Ventas.FindAsync(id);
+            if (venta == null)
             {
                 return NotFound();
             }
 
-            _context.Categoria.Remove(categorium);
+            _context.Ventas.Remove(venta);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CategoriumExists(long id)
+        private bool VentaExists(long id)
         {
-            return _context.Categoria.Any(e => e.Id == id);
+            return _context.Ventas.Any(e => e.Id == id);
         }
     }
 }

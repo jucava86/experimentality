@@ -18,6 +18,7 @@ namespace WebApi.Models
         }
 
         public virtual DbSet<Categorium> Categoria { get; set; }
+        public virtual DbSet<Factura> Facturas { get; set; }
         public virtual DbSet<Producto> Productos { get; set; }
         public virtual DbSet<ProductoCategorium> ProductoCategoria { get; set; }
         public virtual DbSet<Venta> Ventas { get; set; }
@@ -42,6 +43,21 @@ namespace WebApi.Models
                 entity.Property(e => e.Nombre)
                     .IsRequired()
                     .HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<Factura>(entity =>
+            {
+                entity.ToTable("Factura");
+
+                entity.Property(e => e.Fecha).HasColumnType("datetime");
+
+                entity.Property(e => e.Nit)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Referencia)
+                    .IsRequired()
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<Producto>(entity =>
